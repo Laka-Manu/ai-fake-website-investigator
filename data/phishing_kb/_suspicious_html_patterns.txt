@@ -1,0 +1,12 @@
+Phishing websites often contain suspicious HTML code.
+
+Common indicators include:
+
+- hidden forms
+- invisible input fields
+- JavaScript redirects
+- iframe injections
+- disabled right-click
+- credential submission to unknown domains
+
+HTML analysis can identify many phishing attempts.
