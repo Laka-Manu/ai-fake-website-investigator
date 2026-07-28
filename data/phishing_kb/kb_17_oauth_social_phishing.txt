@@ -1,0 +1,1 @@
+Fake Social Logins (Sign in with Google/Facebook): Phishing kits render pop-up modal windows that visually mimic Google, Facebook, or Apple OAuth login prompts. A true OAuth pop-up launches in a separate browser window with a legitimate domain address bar (accounts.google.com). If the "OAuth window" is actually a <div> element inside the main DOM, it is a fake login overlay.

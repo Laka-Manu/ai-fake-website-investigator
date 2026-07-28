@@ -1,0 +1,9 @@
+Malicious JavaScript can redirect users to phishing pages, capture keyboard input, or steal browser cookies.
+
+Security tools should inspect JavaScript for:
+
+- eval()
+- document.write()
+- obfuscated code
+- excessive redirects
+- suspicious network requests

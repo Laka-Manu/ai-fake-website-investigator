@@ -1,0 +1,10 @@
+Cybercriminals frequently create fake banking websites that imitate official online banking portals.
+
+Warning signs include:
+- unusual domain names
+- HTTP instead of HTTPS
+- spelling mistakes
+- poor website design
+- requests for PINs or OTPs
+
+Banks rarely ask customers for sensitive credentials through email or SMS.

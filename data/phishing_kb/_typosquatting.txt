@@ -1,0 +1,10 @@
+Typosquatting is a phishing technique where attackers register domain names that closely resemble legitimate websites.
+
+Examples include:
+gooogle.com
+faceboook.com
+paypa1.com
+
+These domains are designed to trick users into visiting fake websites and entering their login credentials.
+
+Users should always verify spelling before trusting a website.

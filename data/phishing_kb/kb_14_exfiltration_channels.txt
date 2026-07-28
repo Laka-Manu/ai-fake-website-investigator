@@ -1,0 +1,1 @@
+Exfiltration Vectors in Phishing Kits: Modern phishing kits exfiltrate captured credentials directly via API requests to messaging apps. In the HTML/JS source code, look for API call strings containing api.telegram.org/bot followed by a Bot Token and Chat ID, or POST requests sending form data directly to Discord Webhook endpoints.
