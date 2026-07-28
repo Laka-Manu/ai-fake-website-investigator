@@ -1,0 +1,1 @@
+AI Fake Website Investigator is a system designed to detect fraudulent e-commerce websites. It uses RAG pipelines, machine learning models, and web scraping to evaluate suspicious URLs. The system extracts text content, analyzes domain reputation, and flags scam indicators effectively.
