@@ -1,0 +1,1 @@
+Computer Vision Analysis of Brand Elements: Attackers clone CSS styling, official brand logos, and favicon assets directly from legitimate sites via hotlinking (e.g., <img src="https://officialbank.lk/logo.png">). Screenshot analysis agents should detect high structural/layout similarity (>85% SSIM score) to established brand login portals paired with an unauthorized host domain.
