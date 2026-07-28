@@ -1,5 +1,0 @@
-Sri Lanka CERT regularly publishes alerts about phishing campaigns targeting local internet users. Attackers often impersonate banks, government agencies, delivery companies, and social media platforms.
-
-Common indicators include fake login pages, suspicious URLs, urgent messages requesting immediate action, and unexpected requests for personal information.
-
-Users should verify website URLs carefully before entering credentials and should report suspicious websites to Sri Lanka CERT.
