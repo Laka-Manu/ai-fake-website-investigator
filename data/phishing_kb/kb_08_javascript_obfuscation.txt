@@ -1,0 +1,1 @@
+Client-Side Obfuscation & Hidden Frames: Malicious websites frequently employ JavaScript obfuscation libraries (e.g., eval(function(p,a,c,k,e,d)...), JSFuck, or heavy Base64 encoding) to bypass basic scraper detection. Additionally, embedding legitimate login pages within a 100% full-screen <iframe> tag overlay is a classic Adversary-in-the-Middle (AiTM) phishing tactic.
