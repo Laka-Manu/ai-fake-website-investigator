@@ -1,0 +1,1 @@
+Smishing Link Shorteners & Redirect Chains: Phishing links delivered via SMS/WhatsApp frequently use URL shorteners (bit.ly, tinyurl.com, is.gd, t.co) to conceal final destinations. The URL investigation pipeline must follow HTTP 301/302 redirect chains to evaluate the final destination host against WHOIS and SSL rules.
