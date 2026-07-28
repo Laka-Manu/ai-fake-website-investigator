@@ -1,0 +1,1 @@
+Web3 Wallet Drainers & Fake Airdrops: Crypto phishing sites impersonate Web3 wallets (MetaMask, Trust Wallet) or trading exchanges (Binance, Bybit). They prompt users to connect wallets and sign malicious smart contract approvals (eth_sign, Permit2). Any site urging users to enter a 12-word or 24-word seed phrase directly into a web text field is 100% malicious.

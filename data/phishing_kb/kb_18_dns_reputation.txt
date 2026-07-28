@@ -1,0 +1,1 @@
+Blacklist & DNSBL Intelligence: Integration with global blocklists (PhishTank, OpenPhish, VirusTotal, AbuseIPDB) provides immediate verification. However, zero-day phishing sites created within the last 6 hours will not appear on static blacklists, making heuristic evaluation (domain age + form behavior + SSL) essential.

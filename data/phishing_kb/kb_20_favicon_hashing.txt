@@ -1,0 +1,1 @@
+Shodan Favicon MMH3 Fingerprinting: Legitimate organizations use consistent favicons (favicon.ico). By calculating the MurmurHash3 (MMH3) hash of a target site's favicon and comparing it against known database hashes (e.g., Commercial Bank of Ceylon favicon hash), agents can instantly detect when a suspicious domain is using an official bank's favicon asset.
