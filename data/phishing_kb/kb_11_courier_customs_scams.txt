@@ -1,0 +1,1 @@
+Sri Lanka Post & Courier Delivery Scams: A common Sri Lankan phishing campaign sends notifications regarding "undelivered parcels due to unpaid customs fee of Rs. 150 - Rs. 500". The linked fake site requests full credit card details (Card Number, Expiry, CVV, OTP). Legitimate Sri Lanka Post delivery queries never collect online payment via third-party .cc or .top domains.
