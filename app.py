@@ -1,11 +1,22 @@
+import sys
+import os
 import streamlit as st
 import plotly.graph_objects as go
 
-# Import your graph compiled workflow from graph.py
+# 1. Force Python to look in the current file directory for modules
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+# 2. Robust import with detailed error logging
 try:
     from graph import graph
-except ImportError:
-    st.error("Could not import 'graph' from 'graph.py'. Ensure graph.py is in the same directory.")
+except Exception as e:
+    st.error("**Failed to load the graph workflow!**")
+    st.error(f"**Exact Error:** `{e}`")
+    st.info(" **Troubleshooting Tips:**\n"
+            "1. Ensure `graph.py` is in the root directory alongside `app.py`.\n"
+            "2. Verify `graph = builder.compile()` is exported in `graph.py`.\n"
+            "3. Check that all packages (`python-whois`, `langchain-groq`, etc.) are listed in `requirements.txt`.\n"
+            "4. Verify API Keys (`GROQ_API_KEY`, `OPENROUTER_API_KEY`) are configured in Streamlit Secrets.")
     st.stop()
 
 
@@ -67,13 +78,12 @@ if investigate_btn:
         # Initial Graph State
         initial_state = {
             "url": target_url,
-            "screenshot_path": "screenshot.png"  # Optional path if vision screenshot captured
+            "screenshot_path": "uploads/screenshot.png"
         }
 
         # Run the multi-agent graph with a live Streamlit spinner
         with st.spinner(f"Running multi-agent cybersecurity graph for {target_url}..."):
             try:
-                # Invoke LangGraph workflow dynamically
                 final_output = graph.invoke(initial_state)
             except Exception as e:
                 st.error(f"Error during investigation graph execution: {e}")
@@ -120,7 +130,7 @@ if investigate_btn:
 
         st.divider()
 
-        # Detailed Reports in Tabs (Displays REAL JSON data returned by agents)
+        # Detailed Reports in Tabs
         st.subheader("Detailed Multi-Agent Investigation Reports")
         tab_network, tab_vision, tab_decision = st.tabs([" Network & SSL Report", " Vision Report", " Final Decision JSON"])
 
