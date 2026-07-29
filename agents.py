@@ -100,7 +100,7 @@ def network_agent(state):
 # 2. Vision Agent
 def vision_agent(state):
     llm = ChatOpenAI(
-        model="google/gemini-flash-1.5",
+        model="google/gemini-2.0-flash-exp",
         openai_api_base="https://openrouter.ai/api/v1",
         openai_api_key=os.getenv("OPENROUTER_API_KEY"),
         temperature=0.1
