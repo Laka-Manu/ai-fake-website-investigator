@@ -1,22 +1,17 @@
 import sys
 import os
+import traceback
 import streamlit as st
-import plotly.graph_objects as go
 
-# 1. Force Python to look in the current file directory for modules
+# Ensure root directory is in sys.path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-# 2. Robust import with detailed error logging
+# Debug import to surface the exact underlying error
 try:
     from graph import graph
 except Exception as e:
-    st.error("**Failed to load the graph workflow!**")
-    st.error(f"**Exact Error:** `{e}`")
-    st.info(" **Troubleshooting Tips:**\n"
-            "1. Ensure `graph.py` is in the root directory alongside `app.py`.\n"
-            "2. Verify `graph = builder.compile()` is exported in `graph.py`.\n"
-            "3. Check that all packages (`python-whois`, `langchain-groq`, etc.) are listed in `requirements.txt`.\n"
-            "4. Verify API Keys (`GROQ_API_KEY`, `OPENROUTER_API_KEY`) are configured in Streamlit Secrets.")
+    st.error("⚠️ **Error importing `graph.py`**")
+    st.code(traceback.format_exc())
     st.stop()
 
 
