@@ -17,7 +17,7 @@ builder.add_edge("vision_agent", "decision_agent")
 builder.add_edge("decision_agent", END)
 
 
-app = builder.compile()
+graph = builder.compile()
 
 if __name__ == "__main__":
     initial_input = {
