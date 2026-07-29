@@ -1,5 +1,5 @@
 # graph.py
-from langgraph.graph import StateGraph, START, END
+from langgraph.graph import StateGraph, END
 from schemas import AgentState
 from agents import network_agent, vision_agent, decision_agent
 
@@ -17,7 +17,7 @@ builder.add_edge("vision_agent", "decision_agent")
 builder.add_edge("decision_agent", END)
 
 
-graph = builder.compile()
+app = builder.compile()
 
 if __name__ == "__main__":
     initial_input = {
@@ -25,7 +25,7 @@ if __name__ == "__main__":
         "screenshot_path": "uploads/screenshot.png"
     }
 
-    print("Starting Orchestration pipeline...\n")
+    print("start Orchestration pipeline \n")
     final_output = app.invoke(initial_input)
 
     print("---  FINAL DECISION ---")

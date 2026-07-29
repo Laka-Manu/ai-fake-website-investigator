@@ -1,71 +1,154 @@
+# AI Fake Website Investigator
+> An Agentic Multi-Agent AI system designed to detect phishing domains, spoofed websites, and web scams in real-time.
 
-# AI Fake Website Investigator (Agentic AI System)
+Index No -ITBIN-2313-0063
+Name- Lakshani Manusha
+**Live Interactive App:** [https://ai-fake-website-investigator-furhafrcedzo4kpy4khpvw.streamlit.app/](https://ai-fake-website-investigator-furhafrcedzo4kpy4khpvw.streamlit.app/)
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://ai-fake-website-investigator.streamlit.app)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![LangGraph](https://img.shields.io/badge/Orchestration-LangGraph-orange.svg)](https://github.com/langchain-ai/langgraph)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> **Horizon Campus — Faculty of Information Technology**  
-> **IT41043 — Intelligent Systems (Agentic AI)**  
-> **Live Application URL:** [https://ai-fake-website-investigator-furhafrcedzo4kpy4khpvw.streamlit.app/](https://ai-fake-website-investigator.streamlit.app)  
-> **GitHub Repository:** [https://github.com/Laka-Manu/ai-fake-website-investigator.git](https://github.com/Laka-Manu/ai-fake-website-investigator)
+##  Project Overview & Problem Statement
 
----
+Phishing attacks and fake brand impersonation sites are escalating rapidly, particularly targeting users during financial transactions and credential logins. Traditional blocklists (like Google Safe Browsing) often take hours or days to index newly registered malicious domains, creating a blind spot during zero-day phishing campaigns.
 
-## 1. Project Overview & Problem Statement
+This project implements an **Agentic Multi-Agent Framework** using **LangGraph**. Instead of relying on a single monolithic LLM prompt, it delegates investigation sub-tasks to specialized AI agents working in parallel. The system inspects:
+* **WHOIS & Domain Metadata:** Domain age, registrar history, and suspicious TLD patterns.
+* **SSL/TLS Certificates:** Certificate validity, issuer trust, and lifespan short-lived cert abuse.
+* **Page Content & HTML Analysis:** Form action endpoints, hidden iframes, and credential harvester scripts.
+* **Visual Identity (Vision AI):** Multimodal inspection of brand logo alignment, login UI mimics, and page layout anomalies.
 
-Phishing, credential harvesting, and brand impersonation remain major digital security threats, particularly in emerging markets like Sri Lanka. Bad actors frequently register lookalike domains targeting Sri Lankan commercial banks (e.g., Commercial Bank, HNB, Sampath Bank), government utility portals, and payment gateways (LankaPay, eZ Cash).
+All findings are aggregated by a central Decision Agent that cross-checks retrieved cybersecurity knowledge (via RAG) to compute a single **Risk Score (0–100)** and a clear verdict.
 
-The **AI Fake Website Investigator** is an autonomous, multi-agent cybersecurity inspection application. Given a target URL, the system fans out to four specialized diagnostic agents (HTML, SSL, WHOIS Domain Reputation, and Screenshot Vision) that perform deep heuristic and visual checks. Their structured outputs are synthesized alongside a domain-specific **Phishing Knowledge Base (RAG)** by a high-reasoning decision agent to produce a final threat score and risk verdict.
 
----
 
-## 2. System Architecture
+##  System Architecture
 
-The application uses **LangGraph** to implement a parallel fan-out / fan-in orchestrator pattern.
+The core pipeline is built as a state graph managed by `langgraph`. Inputs are routed to feature agents, and their responses update a unified state schema before the final decision is reached.
 
 ```mermaid
 graph TD
-    A[User Input: Target URL] --> B[Streamlit UI Engine]
-    B --> C[LangGraph State Orchestrator]
+    A[User Input: URL] --> B[Streamlit UI Layer]
+    B --> C[LangGraph Orchestrator]
     
-    subgraph Parallel Diagnostic Agents
-        C -->|Raw HTML| D[Agent 1: HTML Auditor<br/>Groq - Llama 3.1 8B]
-        C -->|SSL Handshake| E[Agent 2: SSL Cert Auditor<br/>Groq - Llama 3.1 8B]
-        C -->|WHOIS Lookup| F[Agent 3: Domain Reputation<br/>Groq - Llama 3.1 8B]
-        C -->|Screenshot Base64| G[Agent 4: Vision Analyst<br/>OpenRouter - Gemini 2.5 Flash]
+    subgraph Parallel Inspection Pipeline
+        C --> D[HTML & Content Agent]
+        C --> E[SSL/TLS Audit Agent]
+        C --> F[Domain WHOIS Agent]
+        C --> G[Vision & Layout Agent]
     end
     
-    D -->|JSON Report| H[Agent 5: Lead Security Investigator<br/>Groq - Llama 3.3 70B]
-    E -->|JSON Report| H
-    F -->|JSON Report| H
-    G -->|JSON Report| H
+    D --> H[Decision Agent]
+    E --> H
+    F --> H
+    G --> H
+    I[(FAISS Vector Store / RAG)] -->|Phishing Rules & Heuristics| H
     
-    I[(Phishing Knowledge Base<br/>FAISS + MiniLM Embeddings)] -->|Relevant Scam Rules| H
-    
-    H --> J[Final Verdict: SAFE / SUSPICIOUS / PHISHING]
-    J --> K[Streamlit UI Dashboard & PDF Audit]
+    H --> J[Final Verdict & Gauge Risk Score]
+    J --> B
 
-    ## 4. Agent-to-Agent Communication Protocol
+##  Agent to agent communication diagram ##
 
-Agents exchange state through a strictly typed `InvestigatorState` schema (`src/state.py`). Each diagnostic agent accepts raw metadata and emits a validated JSON report adhering to a predefined Pydantic interface.
-
-```mermaid
-sequenceDiagram
+    sequenceDiagram
     autonumber
-    participant UI as Streamlit App
-    participant Graph as LangGraph Orchestrator
-    participant Agents as Diagnostic Agents (HTML / SSL / Domain / Vision)
-    participant VectorStore as FAISS Phishing RAG
-    participant Lead as Final Decision Agent
+    actor User as User / Evaluator
+    participant UI as Streamlit UI
+    participant Graph as LangGraph State
+    participant Agents as Feature Agents (HTML / SSL / WHOIS / Vision)
+    participant RAG as FAISS Knowledge Base
+    participant Decision as Decision Synthesis Agent
 
-    UI->>Graph: Invoke graph with URL State
-    Graph->>Agents: Fan-out: Execute diagnostic agents in parallel
-    Agents-->>Graph: Return structured JSON reports
-    Graph->>VectorStore: Query similarity search (e.g., "bank domain spoofing")
-    VectorStore-->>Graph: Return top-k relevant knowledge chunks
-    Graph->>Lead: Aggregate 4 JSON reports + RAG Context
-    Lead-->>UI: Return Final Verdict, Risk Score (0-100), and Reasons
+    User->>UI: Submits target URL
+    UI->>Graph: Initialize AgentState(url)
+    Graph->>Agents: Trigger Parallel Node Execution
+    Agents-->>Graph: Return JSON Analysis Payloads
+    Graph->>Decision: Pass Combined State
+    RAG-->>Decision: Inject Matching Phishing Rules (Top-K)
+    Decision-->>UI: Output Verdict (SAFE / SUSPICIOUS / MALICIOUS) & Risk Score
 
-    
+    ## Agent Design Patterns ##
+
+    1. Router / Orchestrator Pattern
+File: graph.py (Lines 10–22)
+
+How it works: The central StateGraph acts as a deterministic orchestrator, initializing state and scattering the payload across network_agent, vision_agent, and decision_agent in a clean directed graph flow.
+
+2. Tool-Use Pattern
+File: agents.py (Lines 20–38)
+
+How it works: network_agent wraps raw Python tools like python-whois and urllib.parse to extract authoritative domain registration dates and registrar metadata rather than hallucinating network details.
+
+3. Reflection & Self-Critique Pattern
+File: agents.py (Lines 75–125)
+
+How it works: The decision_agent receives potentially conflicting signals (e.g., a valid SSL certificate but a suspicious domain creation date) and performs a synthesis step to evaluate contradictions before assigning a final score.
+
+4. RAG-Augmented Reasoning Pattern
+File: agents.py (Lines 90–110)
+
+How it works: Before deciding, the system queries a local FAISS vector database containing known phishing tactics, domain squatting patterns, and URL heuristics to ground LLM reasoning.
+
+##Model Selection Strategy ##### 🤖 Multi-Agent System Overview
+
+| Agent Name | Core Responsibility | Primary Data Sources | Output Format |
+
+| **Network Agent** | Domain age, WHOIS lookup, DNS audit | WHOIS API, DNS queries | Structured JSON |
+| **Vision Agent** | Screenshot inspection & logo spoof detection | Multimodal LLM (Gemini Flash) | Visual Risk Score & Notes |
+| **Decision Agent** | Aggregates all reports & checks RAG rules | Groq Llama 3.1, FAISS Vector DB | Final Score (0-100) & Verdict |
+
+### Threat Severity Levels ##
+
+| Risk Score | Verdict | Level Indicator | Recommended Action |
+
+| **0 – 29** | **SAFE** | 🟢 Low | Safe to proceed and navigate normal pages. |
+| **30 – 69** | **SUSPICIOUS** | 🟡 Moderate | Exercise caution. Verify credentials before logging in. |
+| **70 – 100** | **MALICIOUS** | 🔴 High | **Do not enter details.** High likelihood of phishing. |
+
+##RAG Pipeline & Evaluation ##
+
+The Retrieval-Augmented Generation (RAG) module supplements the LLM with curated cybersecurity rules, common TLD risk profiles, and brand impersonation vectors.
+
+Vector Store Configuration
+Chunking Method: RecursiveCharacterTextSplitter (chunk_size=500, chunk_overlap=50)
+
+Embedding Model: sentence-transformers/all-MiniLM-L6-v2 (Runs locally in CPU memory)
+
+Vector Database: FAISS (faiss-cpu)
+
+##Local Installation & Setup ##
+Prerequisites 
+
+Python 3.10, 3.11, or 3.12 installed
+Git installed
+
+## setup steps
+
+# 1. Clone the repository
+git clone [https://github.com/your-username/ai-fake-website-investigator.git](https://github.com/your-username/ai-fake-website-investigator.git)
+cd ai-fake-website-investigator
+
+# 2. Create and activate a virtual environment
+python -m venv venv
+
+# On Linux/macOS:
+source venv/bin/activate
+# On Windows (Git Bash or CMD):
+venv\Scripts\activate
+
+# 3. Install required packages
+pip install -r requirements.txt
+
+# 4. Set up environment variables
+# Create a .env file or export directly in terminal:
+export GROQ_API_KEY="gsk_your_groq_api_key"
+export OPENROUTER_API_KEY="sk-or-your_openrouter_api_key"
+
+# 5. Launch the Streamlit App
+streamlit run app.py
+
+##Known Limitations ##
+
+Anti-Bot & Cloudflare Protection: Websites behind strict WAFs (like Cloudflare Bot Management or Imperva) may block headles WHOIS lookups or screenshot scrapers, returning HTTP 403 status codes.
+
+Zero-Day Evasion Tactics: Phishing sites using cloaking techniques (serving different content to automated scanners vs. real users) can temporarily bypass static page inspection.
+
+Free Tier API Token Limits: When running heavy multi-agent queries via OpenRouter's free tier, token usage must be capped (max_tokens <= 1000) to avoid API rate limits (HTTP 402).
+
