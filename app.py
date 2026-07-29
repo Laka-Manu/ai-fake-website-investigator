@@ -2,6 +2,11 @@ import sys
 import os
 import traceback
 import streamlit as st
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
 
 # Ensure root directory is in sys.path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
