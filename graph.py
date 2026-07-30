@@ -1,5 +1,5 @@
 # graph.py
-from langgraph.graph import StateGraph, END
+from langgraph.graph import StateGraph,START, END
 from schemas import AgentState
 from agents import network_agent, vision_agent, decision_agent
 
@@ -17,7 +17,7 @@ builder.add_edge("vision_agent", "decision_agent")
 builder.add_edge("decision_agent", END)
 
 
-app = builder.compile()
+graph = builder.compile()
 
 if __name__ == "__main__":
     initial_input = {

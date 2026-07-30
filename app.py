@@ -5,13 +5,12 @@ import streamlit as st
 import plotly.graph_objects as go
 
 # 1. Path setup & Graph Import
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 try:
     from graph import graph
-except Exception as e:
-    st.error("⚠️ **Error importing `graph.py`**")
-    st.code(traceback.format_exc())
+except ImportError as e:
+    st.error(f"⚠️ Import Error: {e}")
     st.stop()
 
 
